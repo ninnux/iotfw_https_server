@@ -2,7 +2,8 @@ package main
 
 import (
     "fmt"
-    //"io"
+    "os"
+    //"io/ioutil"
     "net/http"
     "log"
     "strings"
@@ -26,15 +27,24 @@ func Read(p []byte) (n int, err error) {
   return len(p),nil
 }
 
+func mylog(filename string, message string) {
+	f, err := os.OpenFile(filename, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
+	if err != nil {
+		log.Println(err)
+	}
+	defer f.Close()
+	if _, err := f.WriteString(message); err != nil {
+		log.Println(err)
+	}
+}
+
 func HelloServerRoot(w http.ResponseWriter, req *http.Request) {
     w.Header().Set("Content-Type", "text/plain")
-    //w.Write([]byte("This is an example server.\n"))
-    // fmt.Fprintf(w, "This is an example server.\n")
-    // io.WriteString(w, "This is an example server.\n")
-    //fmt.Println(req)
-    //fmt.Println(req.URL)
     t:=time.Now()
-    fmt.Print(t.Format(time.UnixDate))
+    var mytime string
+    //fmt.Print(t.Format(time.UnixDate))
+    mytime=t.Format("20060102030405")
+    fmt.Print(mytime)
     fmt.Print(",")
     fmt.Print(req.RemoteAddr)
     fmt.Print(",")
@@ -58,6 +68,9 @@ func HelloServerRoot(w http.ResponseWriter, req *http.Request) {
     		fmt.Fprintf(w, "0,%sfw/%s.bin,",url,project_name)
     	}
     }
+    logstr:=fmt.Sprintf("%s,%s,%s\n",mytime,req.RemoteAddr,req.RequestURI)
+    fmt.Println(logstr)
+    mylog("logs/requests", logstr)
 
 }
 
