@@ -13,9 +13,6 @@ import (
 func HelloServer(w http.ResponseWriter, req *http.Request) {
     w.Header().Set("Content-Type", "text/plain")
     w.Write([]byte("This is an example server.\n"))
-    // fmt.Fprintf(w, "This is an example server.\n")
-    // io.WriteString(w, "This is an example server.\n")
-    //fmt.Println(req)
     fmt.Println(req.URL)
     fmt.Println("hello:"+req.RequestURI)
 
@@ -94,8 +91,6 @@ func main() {
     http.HandleFunc("/", HelloServerRoot)
     http.HandleFunc("/hello/", HelloServer)
     http.Handle("/fw/", http.FileServer(http.Dir("./")))
-    //err := http.ListenAndServeTLS(":443", "ca_cert.pem", "ca_key.pem", nil)
-    //err := http.ListenAndServeTLS(":443", "server.crt", "server.key", nil) // WORKS
     err := http.ListenAndServeTLS(":443", "ca_cert.pem", "ca_key_encrypted.pem", nil)
     if err != nil {
         log.Fatal("ListenAndServe: ", err)
