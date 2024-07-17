@@ -42,6 +42,7 @@ func HelloServerRoot(w http.ResponseWriter, req *http.Request) {
     w.Header().Set("Content-Type", "text/plain")
     t:=time.Now()
     var mytime string
+    var mac string
     //fmt.Print(t.Format(time.UnixDate))
     mytime=t.Format("20060102030405")
     fmt.Print(mytime)
@@ -51,15 +52,30 @@ func HelloServerRoot(w http.ResponseWriter, req *http.Request) {
     fmt.Println(req.RequestURI)
     getparameters:=strings.Split(req.RequestURI,"/")
     //fmt.Println(getparameters)
-    if(len(getparameters)==3){
+    if(len(getparameters)==4){
     	project_name:=getparameters[1]
     	fw_version:=getparameters[2]
+    	mac=getparameters[3]
     	url:="https://iotfw.ninux.org/"
 	switch {
 	//case project_name=="https_server" && fw_version=="0.4":
     	//	fmt.Fprintf(w, "1,%sfw/iperf0.1.bin,",url)
-	case project_name=="https_server" && fw_version=="CasettaCaplsule2.4_0.5":
-    	 	fmt.Fprintf(w, "1,%sfw/https_server_CasettaCaplsule2.4_0.6.bin,",url)
+	case project_name=="esp-idf_wifi_mqtt_anemometer" && fw_version=="0.1":
+    	 	fmt.Fprintf(w, "1,%sfw/esp-idf_wifi_mqtt_anemometer_0.2.bin,",url)
+	case project_name=="esp-idf_wifi_mqtt_anemometer" && fw_version=="0.2" && mac=="24:6f:28:10:8e:28":
+    	 	fmt.Fprintf(w, "1,%sfw/esp-idf_wifi_mqtt_anemometer_0.3.bin,",url)
+	case project_name=="esp-idf_wifi_mqtt_bme280" && fw_version=="0.2_casetta":
+    	 	fmt.Fprintf(w, "1,%sfw/relay_https_server_0.3_casetta.bin,",url)
+	case project_name=="esp-idf_lorawan_ds18x20" && fw_version=="0.1":
+    	 	fmt.Fprintf(w, "1,%sfw/esp-idf_lorawan_ds18x20.bin,",url)
+	case project_name=="esp-idf_wifi_mqtt_ds18x20" && fw_version=="0.3":
+   	 	fmt.Fprintf(w, "1,%sfw/esp-idf_wifi_mqtt_ds18x20_0.5.bin,",url)
+	case project_name=="relay_https_server_mqtt" && fw_version=="0.18_casetta":
+    	 	fmt.Fprintf(w, "1,%sfw/relay_https_server_mqtt_0.19_casetta.bin,",url)
+	case project_name=="https_server" && fw_version=="0.7":
+    	 	fmt.Fprintf(w, "1,%sfw/https_server_0.7_CasettaCaplsule2.4.bin,",url)
+	case project_name=="https_server" && fw_version=="CasettaCaplsule2.4_0.6":
+    	 	fmt.Fprintf(w, "1,%sfw/https_server_CasettaCaplsule2.4_0.7.bin,",url)
 	case project_name=="esp-idf_wifi_mqtt_bme280" && fw_version=="0.1":
     	 	fmt.Fprintf(w, "1,%sfw/https_server0.4.bin,",url)
 	case project_name=="https_server" && fw_version=="0.4":
@@ -68,7 +84,7 @@ func HelloServerRoot(w http.ResponseWriter, req *http.Request) {
     		fmt.Fprintf(w, "0,%sfw/%s.bin,",url,project_name)
     	}
     }
-    logstr:=fmt.Sprintf("%s,%s,%s\n",mytime,req.RemoteAddr,req.RequestURI)
+    logstr:=fmt.Sprintf("%s,%s,%s,%s\n",mytime,req.RemoteAddr,req.RequestURI,mac)
     fmt.Println(logstr)
     mylog("logs/requests", logstr)
 

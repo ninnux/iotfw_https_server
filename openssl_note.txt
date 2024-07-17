@@ -1,0 +1,22 @@
+Generate private key (.key)
+# Key considerations for algorithm "RSA" ≥ 2048-bit
+openssl genrsa -out server.key 2048
+
+# Key considerations for algorithm "ECDSA" ≥ secp384r1
+# List ECDSA the supported curves (openssl ecparam -list_curves)
+openssl ecparam -genkey -name secp384r1 -out server.key
+#Generation of self-signed(x509) public key (PEM-encodings .pem|.crt) based on the private (.key)
+openssl req -new -x509 -sha256 -key server.key -out server.crt -days 3650
+
+
+
+#esp32 example
+openssl req -x509 -newkey rsa:2048 -keyout ca_key.pem -out ca_cert.pem -days 365
+
+Volendo riportare la chiave privata in chiaro, si usa il comando `openssl rsa', in modo simile all'esempio seguente:
+#$openssl rsa -in ca_key.pem -out ca_key_unencrypted.pem
+
+
+
+
+
